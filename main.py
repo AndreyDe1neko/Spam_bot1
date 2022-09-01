@@ -8,11 +8,14 @@ api_hash = API_HASH
 
 client = TelegramClient("bot", api_id, api_hash)
 
-timer = int(input("Insert your time in seconds (default it's 1 hour): "))
+try:
+    timer = int(input("Insert your time in minutes (default it's 1 hour): "))
+except ValueError:
+    timer = 60*60
 user_text = input("Insert your text: ")
 
 
-async def handler_all(timer=60*60, user_text="default text"):
+async def handler_all(timer, user_text="default text"):
     line = ''
     with open("chat_list.txt", 'r') as r:
         line = r.read().splitlines()
@@ -22,7 +25,7 @@ async def handler_all(timer=60*60, user_text="default text"):
                 await client.send_message(int(i), user_text)
             except PeerIdInvalidError:
                 print(f"Chat № {i} error")
-        time.sleep(timer)
+        time.sleep(timer*60)
 
 
 with client:
